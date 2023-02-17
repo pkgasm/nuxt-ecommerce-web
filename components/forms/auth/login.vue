@@ -18,11 +18,13 @@
         v-model="password"
         :readonly="loading.login"
         :rules="[$rules.required]"
+        :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:appendInner="showPassword = !showPassword"
         class="mb-2"
         label="Contraseña"
         variant="underlined"
         color="primary"
-        type="password"
+        :type="!showPassword ? 'password' : 'text'"
       ></v-text-field>
       <div class="d-flex flex-row justify-center">
         <v-btn
@@ -44,12 +46,14 @@ const nuxtApp = useNuxtApp();
 const toast = useToast();
 const auth = useAuth();
 
-const formLoginValid = useState("formLoginValid", () => false);
-const email = useState("email", () => null);
-const password = useState("password", () => null);
-const loading = useState(() => ({ login: false }));
+const formLoginValid = ref(false);
+const email = ref(null);
+const password = ref(null);
+const showPassword = ref(false);
+const loading = reactive({ login: false });
 
 const onSubmit = async () => {
+  loading.login = true;
   try {
     await auth.login({
       email: email.value,
@@ -61,6 +65,7 @@ const onSubmit = async () => {
       toast.error(error.response.data.message);
     }
   }
+  loading.login = false;
 };
 </script>
 <style lang="scss" scoped>

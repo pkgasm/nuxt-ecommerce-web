@@ -14,25 +14,28 @@ definePageMeta({
 });
 </script>
 <style lang="scss">
+@import "@/assets/variables.scss";
 .login {
-  height: 100vh;
-  @media only screen and (max-width: 769px) {
-    height: 75%;
+  height: 100%;
+  @include screen(desktop) {
+    height: 100vh;
   }
   &__banner {
-    width: 50%;
-    @media only screen and (max-width: 769px) {
-      display: none;
+    display: none;
+    @include screen(desktop) {
+      width: 50%;
     }
   }
   &__form {
-    width: 50%;
-    @media only screen and (max-width: 769px) {
-      width: 100%;
+    width: 100%;
+    @include screen(desktop) {
+      width: 50%;
     }
   }
   &__image {
-    object-fit: cover;
+    @include screen(desktop) {
+      object-fit: cover;
+    }
   }
 }
 </style>

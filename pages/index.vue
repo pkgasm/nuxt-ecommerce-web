@@ -23,20 +23,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/variables.scss";
 .home {
   background-color: #f5f5f5;
   &__carousel {
-    height: 400px !important;
-    @media only screen and (max-width: 769px) {
-      height: 300px !important;
+    height: 300px !important;
+    @include screen(desktop) {
+      height: 400px !important;
     }
   }
   &__products {
-    margin-left: 5rem;
-    margin-right: 5rem;
-    @media only screen and (max-width: 1024px) {
-      margin-left: 0;
-      margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    @include screen(desktop) {
+      margin-left: 5rem;
+      margin-right: 5rem;
     }
   }
 }

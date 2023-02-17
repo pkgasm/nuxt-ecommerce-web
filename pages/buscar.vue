@@ -27,22 +27,24 @@
 </template>
 <script setup></script>
 <style lang="scss" scope>
+@import "@/assets/variables.scss";
 .store {
   background-color: #f5f5f5;
   &__container {
-    margin-left: 15rem;
-    margin-right: 15rem;
-    padding-top: 60px;
-    @media only screen and (max-width: 1024px) {
-      margin-left: 0;
-      margin-right: 0;
-      padding-top: 20px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 20px;
+    @include screen(landscape) {
+      margin-left: 15rem;
+      margin-right: 15rem;
+      padding-top: 60px;
     }
   }
   &__filters {
-    width: 280px !important;
-    @media only screen and (max-width: 769px) {
-      display: none;
+    display: none;
+    @include screen(desktop) {
+      width: 280px !important;
+      display: block;
     }
   }
   &__products {

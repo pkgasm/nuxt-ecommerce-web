@@ -3,7 +3,9 @@
     <v-app-bar color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>Ecommerce</v-app-bar-title>
+      <v-app-bar-title>
+        <nuxt-link class="client__link" to="/"> Ecommerce </nuxt-link>
+      </v-app-bar-title>
 
       <v-text-field
         v-if="!$device.isMobile"
@@ -98,9 +100,14 @@
 <script setup>
 const client = [
   {
+    title: "Inicio",
+    icon: "mdi-home",
+    link: "/",
+  },
+  {
     title: "Tienda",
     icon: "mdi-store",
-    link: "/tienda",
+    link: "/buscar",
   },
   {
     title: "Carrito",
@@ -125,9 +132,9 @@ const client = [
 ];
 const guest = [
   {
-    title: "Tienda",
+    title: "Buscar",
     icon: "mdi-store",
-    link: "/tienda",
+    link: "/buscar",
   },
   {
     title: "Inicia sesión",
@@ -141,6 +148,7 @@ const guest = [
   },
 ];
 
+const nuxtApp = useNuxtApp();
 const auth = useAuth();
 
 const refSearch = ref(null);
@@ -179,3 +187,12 @@ const logout = async () => {
   }
 };
 </script>
+<style lang="scss" scope>
+.client {
+  &__link {
+    cursor: pointer;
+    text-decoration: none !important;
+    color: white !important;
+  }
+}
+</style>

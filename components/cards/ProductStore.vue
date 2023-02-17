@@ -31,21 +31,22 @@ const cDescription = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
+@import "@/assets/variables.scss";
 .card {
-  width: 720px !important;
-  @media only screen and (max-width: 769px) {
-    width: auto !important;
+  width: auto !important;
+  @include screen(desktop) {
+    width: 720px !important;
   }
   &__img {
-    width: 200px;
-    @media only screen and (max-width: 769px) {
-      width: 150px !important;
+    width: 150px !important;
+    @include screen(desktop) {
+      width: 200px;
     }
   }
   &__detail {
-    width: 520px !important;
-    @media only screen and (max-width: 769px) {
-      width: auto !important;
+    width: auto !important;
+    @include screen(desktop) {
+      width: 520px !important;
     }
   }
 }
