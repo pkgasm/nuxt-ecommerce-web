@@ -63,7 +63,10 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" temporary color="primary">
+    <v-navigation-drawer
+      v-model="drawer"
+      color="primary"
+    >
       <v-list v-if="auth.loggedIn">
         <v-list-item
           :title="auth.user.profile.fullName"
@@ -105,8 +108,8 @@ const client = [
     link: "/",
   },
   {
-    title: "Tienda",
-    icon: "mdi-store",
+    title: "Buscar",
+    icon: "mdi-magnify",
     link: "/buscar",
   },
   {

@@ -3,7 +3,8 @@ export default defineNuxtConfig({
     ssr: false,
     app: {
         head: {
-            htmlAttrs: { lang: 'es' }
+            htmlAttrs: { lang: 'es' },
+            title: 'Ecommerce',
         },
     },
     modules: [

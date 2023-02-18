@@ -2,8 +2,8 @@ import axios from "axios";
 import cookies from "js-cookie";
 
 export default class Auth {
-  baseUrl = "/";
-  strategy = {
+  #baseUrl = "/";
+  #config = {
     endpoints: {
       login: {
         url: "api/v1/auth/login",
@@ -29,64 +29,92 @@ export default class Auth {
     },
   };
 
-  auth = {
-    user: useState("user", () => null),
-    loggedIn: useState("loggedIn", () => false),
+  #auth = {
+    user: null,
+    loggedIn: false,
   };
 
-  constructor(baseUrl, options) {
-    this.baseUrl = baseUrl ?? this.baseUrl;
+  #reactiveState = {
+    user: {
+      set: (user) => {
+        this.#auth.user = user;
+      },
+      get: () => {
+        return this.#auth.user;
+      },
+    },
+    loggedIn: {
+      set: (loggedIn) => {
+        this.#auth.loggedIn = loggedIn;
+      },
+      get: () => {
+        return this.#auth.loggedIn;
+      },
+    },
+  };
 
-    this.strategy.endpoints.login.url =
-      options?.endpoints?.login?.url ?? this.strategy.endpoints.login.url;
-    this.strategy.endpoints.login.method =
-      options?.endpoints?.login?.method ?? this.strategy.endpoints.login.method;
+  constructor(baseUrl, config) {
+    this.#baseUrl = baseUrl ?? this.#baseUrl;
 
-    this.strategy.endpoints.logout.url =
-      options?.endpoints?.logout?.url ?? this.strategy.endpoints.logout.url;
-    this.strategy.endpoints.logout.method =
-      options?.endpoints?.logout?.method ??
-      this.strategy.endpoints.logout.method;
+    this.#config.endpoints.login.url =
+      config?.endpoints?.login?.url ?? this.#config.endpoints.login.url;
+    this.#config.endpoints.login.method =
+      config?.endpoints?.login?.method ?? this.#config.endpoints.login.method;
 
-    this.strategy.endpoints.user.url =
-      options?.endpoints?.user?.url ?? this.strategy.endpoints.user.url;
-    this.strategy.endpoints.user.method =
-      options?.endpoints?.user?.method ?? this.strategy.endpoints.user.method;
+    this.#config.endpoints.logout.url =
+      config?.endpoints?.logout?.url ?? this.#config.endpoints.logout.url;
+    this.#config.endpoints.logout.method =
+      config?.endpoints?.logout?.method ?? this.#config.endpoints.logout.method;
 
-    this.strategy.user.property =
-      options?.user?.property ?? this.strategy.user.property;
-    this.strategy.user.autoFetch =
-      options?.user?.autoFetch ?? this.strategy.user.autoFetch;
+    this.#config.endpoints.user.url =
+      config?.endpoints?.user?.url ?? this.#config.endpoints.user.url;
+    this.#config.endpoints.user.method =
+      config?.endpoints?.user?.method ?? this.#config.endpoints.user.method;
 
-    this.strategy.token.property =
-      options?.token?.property ?? this.strategy.token.property;
-    this.strategy.token.type = options?.token?.type ?? this.strategy.token.type;
-    this.strategy.token.header =
-      options?.token?.header ?? this.strategy.token.header;
+    this.#config.user.property =
+      config?.user?.property ?? this.#config.user.property;
+    this.#config.user.autoFetch =
+      config?.user?.autoFetch ?? this.#config.user.autoFetch;
 
-    this.mount();
+    this.#config.token.property =
+      config?.token?.property ?? this.#config.token.property;
+    this.#config.token.type = config?.token?.type ?? this.#config.token.type;
+    this.#config.token.header =
+      config?.token?.header ?? this.#config.token.header;
+
+    this.#reactiveState.user.set =
+      config?.reactiveState?.user?.set ?? this.#reactiveState.user.set;
+    this.#reactiveState.user.get =
+      config?.reactiveState?.user?.get ?? this.#reactiveState.user.get;
+
+    this.#reactiveState.loggedIn.set =
+      config?.reactiveState?.loggedIn?.set ?? this.#reactiveState.loggedIn.set;
+    this.#reactiveState.loggedIn.get =
+      config?.reactiveState?.loggedIn?.get ?? this.#reactiveState.loggedIn.get;
+
+    this.init();
   }
 
-  async mount() {
-    const token = this.getToken();
+  async init() {
+    const token = this.#getToken();
     if (token && !this.user) {
-      this.setToken(token);
-      if (this.strategy.user.autoFetch) await this.fetchUser();
+      this.#setToken(token);
+      if (this.#config.user.autoFetch) await this.fetchUser();
     }
   }
 
   login(params) {
     return new Promise((resolve, reject) => {
       axios({
-        url: `${this.baseUrl}${this.strategy.endpoints.login.url}`,
-        method: this.strategy.endpoints.login.method,
+        url: `${this.#baseUrl}${this.#config.endpoints.login.url}`,
+        method: this.#config.endpoints.login.method,
         data: params,
       })
         .then(async (response) => {
-          const token = response.data[this.strategy.token.property];
-          const type = this.strategy.token.type;
-          this.setToken(`${type} ${token}`);
-          if (this.strategy.user.autoFetch) await this.fetchUser();
+          const token = response.data[this.#config.token.property];
+          const type = this.#config.token.type;
+          this.#setToken(`${type} ${token}`);
+          if (this.#config.user.autoFetch) await this.fetchUser();
           resolve(response.data);
         })
         .catch((error) => {
@@ -97,18 +125,18 @@ export default class Auth {
 
   fetchUser() {
     return new Promise((resolve, reject) => {
-      const token = this.getToken();
+      const token = this.#getToken();
       const headers = {};
-      headers[this.strategy.token.header] = token;
+      headers[this.#config.token.header] = token;
 
       axios({
-        url: `${this.baseUrl}${this.strategy.endpoints.user.url}`,
-        method: this.strategy.endpoints.user.method,
+        url: `${this.#baseUrl}${this.#config.endpoints.user.url}`,
+        method: this.#config.endpoints.user.method,
         headers: headers,
       })
         .then((response) => {
-          const user = response.data[this.strategy.user.property];
-          this.setUser(user);
+          const user = response.data[this.#config.user.property];
+          this.#setUser(user);
           resolve(user);
         })
         .catch((error) => {
@@ -119,19 +147,19 @@ export default class Auth {
 
   logout() {
     return new Promise((resolve, reject) => {
-      const token = this.getToken();
+      const token = this.#getToken();
       const headers = {};
-      headers[this.strategy.token.header] = token;
+      headers[this.#config.token.header] = token;
 
       axios({
-        url: `${this.baseUrl}${this.strategy.endpoints.logout.url}`,
-        method: this.strategy.endpoints.logout.method,
+        url: `${this.#baseUrl}${this.#config.endpoints.logout.url}`,
+        method: this.#config.endpoints.logout.method,
         headers: headers,
       })
         .then((response) => {
           resolve(response.data);
-          this.setUser(null)
-          this.removeToken()
+          this.#setUser(null);
+          this.#removeToken();
         })
         .catch((error) => {
           reject(error);
@@ -139,32 +167,32 @@ export default class Auth {
     });
   }
 
-  setUser(user = null) {
-    this.auth.user.value = user;
-    this.auth.loggedIn.value = Boolean(user);
+  #setUser(user = null) {
+    this.#reactiveState.user.set(user);
+    this.#reactiveState.loggedIn.set(Boolean(user));
   }
 
   get user() {
-    return this.auth.user.value;
+    return this.#reactiveState.user.get();
   }
 
   get loggedIn() {
-    return this.auth.loggedIn.value;
+    return this.#reactiveState.loggedIn.get();
   }
 
-  setToken(token) {
+  #setToken(token) {
     localStorage.setItem("auth.token", token);
     cookies.set("auth.token", token);
   }
 
-  getToken() {
+  #getToken() {
     let token = null;
     if (!token) token = localStorage.getItem("auth.token");
     if (!token) token = cookies.get("auth.token");
     return token;
   }
 
-  removeToken() {
+  #removeToken() {
     localStorage.removeItem("auth.token");
     cookies.remove("auth.token", { paht: "" });
   }

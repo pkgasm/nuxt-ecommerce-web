@@ -61,6 +61,7 @@ const onSubmit = async () => {
     });
     nuxtApp.$router.replace("/");
   } catch (error) {
+    console.log(error)
     if (error?.response?.data) {
       toast.error(error.response.data.message);
     }
