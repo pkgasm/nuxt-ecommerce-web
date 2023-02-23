@@ -28,7 +28,7 @@
       ></v-text-field>
       <div class="d-flex flex-row justify-center">
         <v-btn
-          :disabled="!formLoginValid"
+          :disabled="!formLoginValid.value"
           :loading="loading.login"
           color="primary"
           type="submit"
@@ -61,7 +61,7 @@ const onSubmit = async () => {
     });
     nuxtApp.$router.replace("/");
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (error?.response?.data) {
       toast.error(error.response.data.message);
     }

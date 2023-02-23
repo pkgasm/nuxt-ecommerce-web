@@ -21,7 +21,7 @@
 
       <template v-slot:append>
         <v-btn icon="mdi-magnify" @click="iconSearch"></v-btn>
-        <v-btn icon="mdi-cart"></v-btn>
+        <v-btn icon="mdi-cart" to="/carrito"></v-btn>
         <v-menu location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn icon="mdi-account" v-bind="props"></v-btn>
@@ -63,10 +63,7 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      color="primary"
-    >
+    <v-navigation-drawer v-model="drawer" color="primary">
       <v-list v-if="auth.loggedIn">
         <v-list-item
           :title="auth.user.profile.fullName"

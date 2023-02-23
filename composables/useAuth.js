@@ -1,26 +1,26 @@
 import Auth from "~/services/auth";
+import { useAuthStore } from "~/store/auth";
 
 export const useAuth = () => {
+  const authStore = useAuthStore();
   const nuxtApp = useNuxtApp();
-  const user = ref(null)
-  const loggedIn = ref(false);
 
   const config = {
     reactiveState: {
       user: {
         set: (value) => {
-          user.value = value;
+          authStore.auth.user = value;
         },
         get: () => {
-          return user.value;
+          return authStore.auth.user;
         },
       },
       loggedIn: {
         set: (value) => {
-          loggedIn.value = value;
+          authStore.auth.loggedIn = value;
         },
         get: () => {
-          return loggedIn.value;
+          return authStore.auth.loggedIn;
         },
       },
     },

@@ -1,7 +1,9 @@
 <template>
   <v-card class="card">
     <div class="d-flex">
-      <v-img class="card__img" src="/img/image.png" cover></v-img>
+      <div>
+        <v-img class="card__img" src="/img/image.png" cover></v-img>
+      </div>
       <div class="card__detail d-flex flex-column">
         <v-card-title class="w-100 d-flex align-center">
           Nombre del producto
@@ -39,6 +41,7 @@ const cDescription = computed(() => {
   }
   &__img {
     width: 150px !important;
+    height: 100%;
     @include screen(desktop) {
       width: 200px;
     }

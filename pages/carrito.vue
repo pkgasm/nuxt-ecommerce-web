@@ -1,6 +1,6 @@
 <template>
   <section class="cart d-flex flex-column align-center">
-    <div class="cart__total__mobile d-flex flex-column ">
+    <div class="cart__total__mobile d-flex flex-column">
       <div class="w-100 px-14 d-flex">
         <div class="text-h6">Total:</div>
         <v-spacer></v-spacer>
@@ -12,7 +12,7 @@
       <div
         class="cart__items mb-5 mt-10 d-flex flex-column align-center justify-center"
       >
-        <cards-cart-item class="mb-3" v-for="slide in 5" :key="slide" />
+        <cards-cart-item class="mb-3" v-for="slide in 1" :key="slide" />
       </div>
       <v-divider></v-divider>
       <div class="cart__total__desktop">
@@ -27,9 +27,15 @@
     </v-card>
   </section>
 </template>
+<script setup>
+definePageMeta({
+  middleware: ["auth"],
+});
+</script>
 <style lang="scss" scope>
 @import "@/assets/variables.scss";
 .cart {
+  height: 100vh;
   background-color: #f5f5f5;
   padding-bottom: 2rem;
   @include screen(tablet) {
