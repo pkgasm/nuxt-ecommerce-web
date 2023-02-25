@@ -82,7 +82,7 @@
         </v-list-item>
       </v-list>
       <v-list>
-        <v-list-item v-for="(m, i) of menu" :value="i" :to="m.link">
+        <v-list-item v-for="m of menu" :value="m.link" :to="m.link">
           <template v-slot:prepend>
             <v-icon :icon="m.icon"></v-icon>
           </template>
