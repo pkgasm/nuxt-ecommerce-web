@@ -1,7 +1,7 @@
 <template>
-  <nav-bars-client>
+  <NuxtLayout>
     <NuxtPage />
-  </nav-bars-client>
+  </NuxtLayout>
 </template>
 <script>
 export default {

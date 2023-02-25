@@ -1,14 +1,15 @@
 <template>
   <v-app>
     <v-app-bar color="primary">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer">
+        <v-icon icon="mdi-menu"></v-icon>
+      </v-app-bar-nav-icon>
 
-      <v-app-bar-title>
+      <v-app-bar-title v-if="!$device.isMobile">
         <nuxt-link class="client__link" to="/"> Ecommerce </nuxt-link>
       </v-app-bar-title>
 
       <v-text-field
-        v-if="!$device.isMobile"
         ref="refSearch"
         class="mt-5"
         label="Buscar"
@@ -20,9 +21,13 @@
       <v-spacer v-if="!$device.isMobile"></v-spacer>
 
       <template v-slot:append>
-        <v-btn icon="mdi-magnify" @click="iconSearch"></v-btn>
+        <v-btn
+          v-if="!$device.isMobile"
+          icon="mdi-magnify"
+          @click="iconSearch"
+        ></v-btn>
         <v-btn icon="mdi-cart" to="/carrito"></v-btn>
-        <v-menu location="bottom">
+        <v-menu v-if="!$device.isMobile" location="bottom">
           <template v-slot:activator="{ props }">
             <v-btn icon="mdi-account" v-bind="props"></v-btn>
           </template>

@@ -15,7 +15,7 @@
         <cards-cart-item class="mb-3" v-for="slide in 1" :key="slide" />
       </div>
       <v-divider></v-divider>
-      <div class="cart__total__desktop">
+      <div class="cart__total__desktop my-5">
         <div class="d-flex justify-end">
           <div class="text-h5 mr-5">Total:</div>
           <div class="text-h5">$7,500</div>
@@ -76,6 +76,9 @@ definePageMeta({
       bottom: 0;
       padding-bottom: 1rem;
       padding-top: 1rem;
+      @include screen(landscape) {
+        visibility: hidden;
+      }
     }
   }
 }
