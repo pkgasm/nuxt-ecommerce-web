@@ -1,6 +1,6 @@
 <template>
   <v-container class="form">
-    <v-form ref="formLogin" v-model="formLoginValid" @submit.prevent="onSubmit">
+    <v-form ref="formLogin" @submit.prevent="onSubmit">
       <div class="d-flex flex-row justify-center">
         <div class="text-h4 mb-10">Inicia sesión</div>
       </div>
@@ -27,12 +27,7 @@
         :type="!showPassword ? 'password' : 'text'"
       ></v-text-field>
       <div class="d-flex flex-row justify-center">
-        <v-btn
-          :disabled="!formLoginValid.value"
-          :loading="loading.login"
-          color="primary"
-          type="submit"
-        >
+        <v-btn :loading="loading.login" color="primary" type="submit">
           Iniciar sesión
         </v-btn>
       </div>
@@ -46,7 +41,7 @@ const nuxtApp = useNuxtApp();
 const toast = useToast();
 const auth = useAuth();
 
-const formLoginValid = ref(false);
+const formLogin = ref(null);
 const email = ref(null);
 const password = ref(null);
 const showPassword = ref(false);
@@ -55,11 +50,13 @@ const loading = reactive({ login: false });
 const onSubmit = async () => {
   loading.login = true;
   try {
-    await auth.login({
-      email: email.value,
-      password: password.value,
-    });
-    nuxtApp.$router.replace("/");
+    if (formLogin.value.validate()) {
+      await auth.login({
+        email: email.value,
+        password: password.value,
+      });
+      nuxtApp.$router.replace("/");
+    }
   } catch (error) {
     console.log(error);
     if (error?.response?.data) {

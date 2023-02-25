@@ -187,6 +187,7 @@ const iconSearch = () => {
 const logout = async () => {
   try {
     await auth.logout();
+    nuxtApp.$router.push("/");
   } catch (error) {
     console.log("error", error);
   }
